@@ -1,0 +1,156 @@
+/**
+ * 🎨 AI TRADING COMMAND — COLOR SYSTEM
+ * Professional (Stripe) + AI-First (ChatGPT) Hybrid
+ * Modern, Intelligent, Confident
+ */
+
+:root {
+  /* ─────────────────────────────────────────────────────────────────────── */
+  /* BACKGROUND LAYERS (Professional Navy + Soft Black) */
+  /* ─────────────────────────────────────────────────────────────────────── */
+  --bg-base: #0d1117;           /* GitHub dark (soft black) */
+  --bg-panel: #161b22;          /* Subtle navy elevation */
+  --bg-elevated: #21262d;       /* Clear elevation */
+  --bg-hover: #30363d;          /* Interactive feedback */
+  --bg-active: #3d444d;         /* Active/selected state */
+
+  /* ─────────────────────────────────────────────────────────────────────── */
+  /* TEXT COLORS (High Contrast — WCAG AAA) */
+  /* ─────────────────────────────────────────────────────────────────────── */
+  --text-primary: #e6edf3;      /* GitHub white — primary text */
+  --text-secondary: #8b949e;    /* Muted gray — secondary text */
+  --text-muted: #6e7681;        /* Subtle gray — muted text */
+  --text-disabled: #484f58;     /* Disabled state */
+
+  /* ─────────────────────────────────────────────────────────────────────── */
+  /* ACCENT COLORS (Professional + AI) */
+  /* ─────────────────────────────────────────────────────────────────────── */
+  --accent-buy: #3fb950;        /* GitHub green — BUY/positive */
+  --accent-buy-hover: #2ea043;  /* Darker green — hover */
+  --accent-buy-glow: rgba(63, 185, 80, 0.3); /* glow effect */
+
+  --accent-sell: #f85149;       /* GitHub red — SELL/negative */
+  --accent-sell-hover: #da3633; /* Darker red — hover */
+  --accent-sell-glow: rgba(248, 81, 73, 0.3); /* glow effect */
+
+  --accent-primary: #58a6ff;    /* GitHub blue — primary actions */
+  --accent-primary-hover: #388bfd; /* Darker blue — hover */
+  --accent-primary-glow: rgba(88, 166, 255, 0.3); /* glow effect */
+
+  --accent-ai: #a371f7;         /* Purple — AI features */
+  --accent-ai-hover: #8957e5;   /* Darker purple — hover */
+  --accent-ai-glow: rgba(163, 113, 247, 0.3); /* AI glow effect */
+
+  --accent-warning: #d29922;    /* Amber — warning */
+  --accent-warning-glow: rgba(210, 153, 34, 0.3);
+  
+  /* ─────────────────────────────────────────────────────────────────────── */
+  /* BORDER COLORS (Subtle but visible) */
+  /* ─────────────────────────────────────────────────────────────────────── */
+  --border-subtle: rgba(48, 54, 61, 0.5);      /* Very subtle */
+  --border-default: rgba(48, 54, 61, 1);       /* Default border */
+  --border-strong: rgba(61, 68, 77, 1);        /* Strong border */
+  --border-focus: rgba(88, 166, 255, 0.6);     /* Focus state (blue) */
+  --border-ai: rgba(163, 113, 247, 0.6);       /* AI focus state (purple) */
+  
+  /* ─────────────────────────────────────────────────────────────────────── */
+  /* SHADOWS (Depth perception) */
+  /* ─────────────────────────────────────────────────────────────────────── */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.6);
+  
+  /* Glow shadows */
+  --shadow-glow-buy: 0 0 20px var(--accent-buy-glow);
+  --shadow-glow-sell: 0 0 20px var(--accent-sell-glow);
+  --shadow-glow-primary: 0 0 20px var(--accent-primary-glow);
+  --shadow-glow-ai: 0 0 30px var(--accent-ai-glow), 0 0 60px var(--accent-ai-glow);
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* TAILWIND CUSTOM CLASSES */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+/* Background utilities */
+.bg-base { background-color: var(--bg-base); }
+.bg-panel { background-color: var(--bg-panel); }
+.bg-elevated { background-color: var(--bg-elevated); }
+.bg-hover { background-color: var(--bg-hover); }
+.bg-active { background-color: var(--bg-active); }
+
+/* Text utilities */
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-muted { color: var(--text-muted); }
+.text-disabled { color: var(--text-disabled); }
+
+/* Accent utilities */
+.text-buy { color: var(--accent-buy); }
+.text-sell { color: var(--accent-sell); }
+.text-primary { color: var(--accent-primary); }
+.text-ai { color: var(--accent-ai); }
+
+.bg-buy { background-color: var(--accent-buy); }
+.bg-sell { background-color: var(--accent-sell); }
+.bg-primary { background-color: var(--accent-primary); }
+.bg-ai { background-color: var(--accent-ai); }
+
+/* Border utilities */
+.border-subtle { border-color: var(--border-subtle); }
+.border-default { border-color: var(--border-default); }
+.border-strong { border-color: var(--border-strong); }
+.border-focus { border-color: var(--border-focus); }
+
+/* Shadow utilities */
+.shadow-glow-buy { box-shadow: var(--shadow-glow-buy); }
+.shadow-glow-sell { box-shadow: var(--shadow-glow-sell); }
+.shadow-glow-info { box-shadow: var(--shadow-glow-info); }
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* HOVER STATES (Aydın feedback) */
+/* ─────────────────────────────────────────────────────────────────────── */
+.hover-panel:hover {
+  background-color: var(--bg-hover);
+  border-color: var(--border-strong);
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-buy:hover {
+  background-color: var(--accent-buy-hover);
+  box-shadow: var(--shadow-glow-buy);
+}
+
+.hover-sell:hover {
+  background-color: var(--accent-sell-hover);
+  box-shadow: var(--shadow-glow-sell);
+}
+
+.hover-primary:hover {
+  background-color: var(--accent-primary-hover);
+  box-shadow: var(--shadow-glow-primary);
+}
+
+.hover-ai:hover {
+  background-color: var(--accent-ai-hover);
+  box-shadow: var(--shadow-glow-ai);
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* FOCUS STATES (Accessibility) */
+/* ─────────────────────────────────────────────────────────────────────── */
+.focus-ring:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--border-focus);
+}
+
+.focus-ring-buy:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-buy-glow);
+}
+
+.focus-ring-sell:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-sell-glow);
+}
+

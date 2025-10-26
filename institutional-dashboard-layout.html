@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Institutional Trading Dashboard</title>
+    <style>
+        /* ========== RESET & BASE STYLES ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #0f1620;
+            color: #e5e7eb;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ========== CONTAINER & LAYOUT ========== */
+        .dashboard-container {
+            width: 100%;
+            max-width: 100vw;
+            padding: 16px;
+            margin: 0 auto;
+        }
+
+        /* ========== HEADER ========== */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #1f2937;
+        }
+
+        .dashboard-title {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .dashboard-title h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .dashboard-title p {
+            font-size: 14px;
+            color: #9ca3af;
+        }
+
+        .dashboard-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #10b981;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .btn {
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid #374151;
+            background-color: transparent;
+            color: #e5e7eb;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: #1f2937;
+            border-color: #4b5563;
+        }
+
+        /* ========== CHART SECTION (ALWAYS TOP) ========== */
+        .chart-section {
+            width: 100%;
+            background-color: #1a1f2e;
+            border: 1px solid #2d3748;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .chart-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chart-icon {
+            width: 20px;
+            height: 20px;
+            color: #60a5fa;
+        }
+
+        .chart-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .chart-controls button {
+            padding: 6px 12px;
+            font-size: 11px;
+            font-weight: 600;
+            border: 1px solid #374151;
+            background-color: #0f1620;
+            color: #9ca3af;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .chart-controls button.active,
+        .chart-controls button:hover {
+            background-color: #3b82f6;
+            color: #ffffff;
+            border-color: #3b82f6;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 500px;
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            font-size: 14px;
+            border: 1px solid #374151;
+        }
+
+        /* ========== WIDGETS GRID ========== */
+        .widgets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        /* Large screens: 3 columns */
+        @media (min-width: 1400px) {
+            .widgets-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Medium screens: 2 columns */
+        @media (min-width: 900px) and (max-width: 1399px) {
+            .widgets-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Small screens: 1 column */
+        @media (max-width: 899px) {
+            .widgets-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ========== WIDGET CARD ========== */
+        .widget-card {
+            background-color: #1a1f2e;
+            border: 1px solid #2d3748;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .widget-card:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .widget-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #374151;
+        }
+
+        .widget-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .widget-icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        .widget-icon.cyan { color: #06b6d4; }
+        .widget-icon.purple { color: #a855f7; }
+        .widget-icon.green { color: #10b981; }
+        .widget-icon.orange { color: #f59e0b; }
+        .widget-icon.blue { color: #3b82f6; }
+        .widget-icon.amber { color: #f59e0b; }
+
+        .widget-action {
+            font-size: 12px;
+            color: #9ca3af;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .widget-action:hover {
+            color: #3b82f6;
+        }
+
+        .widget-content {
+            flex: 1;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #374151 transparent;
+        }
+
+        .widget-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .widget-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .widget-content::-webkit-scrollbar-thumb {
+            background-color: #374151;
+            border-radius: 3px;
+        }
+
+        /* ========== WIDGET SPECIFIC STYLES ========== */
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background-color: #0f1620;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .metric-value.positive { color: #10b981; }
+        .metric-value.negative { color: #ef4444; }
+
+        .signal-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+
+        .signal-badge.buy {
+            background-color: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .signal-badge.sell {
+            background-color: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .chart-mini {
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            border-radius: 6px;
+            margin-top: 12px;
+            border: 1px solid #374151;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            font-size: 12px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 4px;
+            background-color: #0f1620;
+            padding: 4px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 8px 12px;
+            font-size: 11px;
+            font-weight: 600;
+            border: none;
+            background-color: transparent;
+            color: #9ca3af;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-button.active {
+            background-color: #3b82f6;
+            color: #ffffff;
+        }
+
+        .news-item {
+            padding: 12px;
+            background-color: #0f1620;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border-left: 3px solid #3b82f6;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .news-item:hover {
+            background-color: #1f2937;
+            transform: translateX(4px);
+        }
+
+        .news-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .news-meta {
+            font-size: 11px;
+            color: #6b7280;
+        }
+
+        /* ========== FULL WIDTH WIDGET ========== */
+        .widget-full {
+            grid-column: 1 / -1;
+        }
+
+        /* ========== JOURNAL SECTION ========== */
+        .journal-section {
+            background-color: #1a1f2e;
+            border: 1px solid #2d3748;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 24px;
+        }
+
+        .journal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .journal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .journal-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 12px;
+        }
+
+        .journal-entry {
+            padding: 12px;
+            background-color: #0f1620;
+            border-radius: 8px;
+            border-left: 3px solid #10b981;
+            font-size: 12px;
+        }
+
+        .journal-entry-title {
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .journal-entry-text {
+            color: #9ca3af;
+            line-height: 1.4;
+        }
+
+        /* ========== RESPONSIVE ADJUSTMENTS ========== */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 12px;
+            }
+
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .dashboard-title h1 {
+                font-size: 20px;
+            }
+
+            .chart-container {
+                height: 350px;
+            }
+
+            .chart-controls {
+                flex-wrap: wrap;
+            }
+
+            .widget-card {
+                min-height: 250px;
+            }
+
+            .journal-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-title h1 {
+                font-size: 18px;
+            }
+
+            .chart-section {
+                padding: 16px;
+            }
+
+            .widget-card {
+                padding: 16px;
+            }
+        }
+
+        /* ========== LOADING STATES & ANIMATIONS ========== */
+        .shimmer {
+            background: linear-gradient(90deg, #1a1f2e 25%, #2d3748 50%, #1a1f2e 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* ========== UTILITY CLASSES ========== */
+        .text-xs { font-size: 12px; }
+        .text-sm { font-size: 14px; }
+        .text-base { font-size: 16px; }
+        .text-lg { font-size: 18px; }
+        .font-bold { font-weight: 700; }
+        .text-muted { color: #9ca3af; }
+        .text-white { color: #ffffff; }
+        .mt-2 { margin-top: 8px; }
+        .mt-4 { margin-top: 16px; }
+        .mb-2 { margin-bottom: 8px; }
+        .mb-4 { margin-bottom: 16px; }
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .gap-2 { gap: 8px; }
+        .gap-4 { gap: 16px; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="dashboard-title">
+                <h1>Institutional Trading Cockpit</h1>
+                <p>EUR/USD • Real-time All-in-One Dashboard</p>
+            </div>
+            <div class="dashboard-actions">
+                <div class="status-indicator">
+                    <span class="status-dot"></span>
+                    <span>Market Data Live</span>
+                </div>
+                <button class="btn">Export Snapshot</button>
+            </div>
+        </header>
+
+        <!-- MAIN CHART SECTION (ALWAYS TOP, FULL WIDTH) -->
+        <section class="chart-section">
+            <div class="chart-header">
+                <div class="chart-title">
+                    <svg class="chart-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
+                    </svg>
+                    EUR/USD Institutional Price Chart
+                </div>
+                <div class="chart-controls">
+                    <button class="active">1H</button>
+                    <button>4H</button>
+                    <button>1D</button>
+                    <button>1W</button>
+                </div>
+            </div>
+            <div class="chart-container">
+                <span>TradingView Chart • 50 EMA • 200 EMA • RSI(14) • Volume Profile</span>
+            </div>
+        </section>
+
+        <!-- WIDGETS GRID (BELOW CHART) -->
+        <div class="widgets-grid">
+            <!-- Widget 1: Risk & Portfolio -->
+            <div class="widget-card">
+                <div class="widget-header">
+                    <div class="widget-title">
+                        <svg class="widget-icon orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                        Risk & Portfolio
+                    </div>
+                    <span class="widget-action">Details →</span>
+                </div>
+                <div class="widget-content">
+                    <div class="metric-row">
+                        <span class="metric-label">Portfolio Value</span>
+                        <span class="metric-value">$12,540,320</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Daily P&L</span>
+                        <span class="metric-value positive">+$58,420 (1.14%)</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Value at Risk (VaR)</span>
+                        <span class="metric-value">$15,234.88</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Sharpe Ratio</span>
+                        <span class="metric-value">1.86</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Max Drawdown</span>
+                        <span class="metric-value negative">-8.45%</span>
+                    </div>
+                    <div class="chart-mini">Drawdown Tracker Chart</div>
+                </div>
+            </div>
+
+            <!-- Widget 2: AI Intelligence Suite -->
+            <div class="widget-card">
+                <div class="widget-header">
+                    <div class="widget-title">
+                        <svg class="widget-icon purple" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                        AI Intelligence Suite
+                    </div>
+                    <span class="widget-action">89% confidence</span>
+                </div>
+                <div class="widget-content">
+                    <div class="tabs">
+                        <button class="tab-button active">Signal</button>
+                        <button class="tab-button">News</button>
+                        <button class="tab-button">Technical</button>
+                    </div>
+                    <div class="flex gap-2 mb-4">
+                        <span class="signal-badge buy">BUY</span>
+                        <div class="flex-col">
+                            <span class="text-sm text-white font-bold">Target: 1.0985</span>
+                            <span class="text-xs text-muted">Stop Loss: 1.0820</span>
+                        </div>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Confidence</span>
+                        <span class="metric-value">89%</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Risk Level</span>
+                        <span class="metric-value" style="color: #f59e0b;">Medium</span>
+                    </div>
+                    <p class="text-xs text-muted mt-4">
+                        RSI recovery + bullish divergence confirmed on 4H. ECB dovish tone lightens downside risk. Momentum remains supportive.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Widget 3: Derivatives Analytics -->
+            <div class="widget-card">
+                <div class="widget-header">
+                    <div class="widget-title">
+                        <svg class="widget-icon cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                        Derivatives Analytics
+                    </div>
+                    <span class="widget-action">View all →</span>
+                </div>
+                <div class="widget-content">
+                    <div class="chart-mini">Open Interest Chart</div>
+                    <div class="metric-row mt-2">
+                        <span class="metric-label">Funding Rate</span>
+                        <span class="metric-value positive">+0.012%</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Options OI</span>
+                        <span class="metric-value">$2.1B</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Put/Call Ratio</span>
+                        <span class="metric-value">0.72</span>
+                    </div>
+                    <p class="text-xs text-muted mt-4">
+                        Max pain at 1.0850. Gamma exposure turning positive above 1.0900 may accelerate breakout.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Widget 4: Order Book & Liquidity -->
+            <div class="widget-card">
+                <div class="widget-header">
+                    <div class="widget-title">
+                        <svg class="widget-icon green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
+                        </svg>
+                        Order Book & Liquidity
+                    </div>
+                    <span class="widget-action">Settings</span>
+                </div>
+                <div class="widget-content">
+                    <div class="chart-mini">Order Book Visualization</div>
+                    <div class="chart-mini">Liquidity Heatmap</div>
+                    <div class="metric-row mt-2">
+                        <span class="metric-label">Order Delta</span>
+                        <span class="metric-value positive">+15.2M</span>
+                    </div>
+                    <p class="text-xs text-muted mt-2">
+                        Significant bids at 1.0800-1.0810 provide strong support. Thin liquidity above 1.0950.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Widget 5: Economic Calendar & News -->
+            <div class="widget-card">
+                <div class="widget-header">
+                    <div class="widget-title">
+                        <svg class="widget-icon amber" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        Calendar & News
+                    </div>
+                    <span class="widget-action">View all →</span>
+                </div>
+                <div class="widget-content">
+                    <div class="tabs">
+                        <button class="tab-button active">Calendar</button>
+                        <button class="tab-button">News</button>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-title">🔴 US Core CPI m/m - High Impact</div>
+                        <div class="news-meta">Today 13:30 UTC • Expected: 0.3%</div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-title">🟡 ECB President Lagarde Speaks</div>
+                        <div class="news-meta">Today 15:00 UTC • Medium Impact</div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-title">Lagarde signals Q1 rate cuts possible</div>
+                        <div class="news-meta">Reuters • 2h ago</div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-title">USD weakens as Fed holds rates steady</div>
+                        <div class="news-meta">Bloomberg • 4h ago</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Widget 6: Rapid Execution -->
+            <div class="widget-card">
+                <div class="widget-header">
+                    <div class="widget-title">
+                        <svg class="widget-icon blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                        Rapid Execution
+                    </div>
+                </div>
+                <div class="widget-content">
+                    <div class="flex gap-2 mb-4">
+                        <button style="flex: 1; padding: 16px; background: linear-gradient(135deg, #10b981, #059669); border: none; border-radius: 8px; color: white; font-weight: 700; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">BUY</button>
+                        <button style="flex: 1; padding: 16px; background: linear-gradient(135deg, #ef4444, #dc2626); border: none; border-radius: 8px; color: white; font-weight: 700; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">SELL</button>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Order Type</span>
+                        <select style="background: #0f1620; color: #fff; border: 1px solid #374151; padding: 6px 12px; border-radius: 6px; font-size: 12px;">
+                            <option>Market</option>
+                            <option>Limit</option>
+                            <option>Stop Loss</option>
+                        </select>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Amount (EUR)</span>
+                        <input type="number" value="10000" style="background: #0f1620; color: #fff; border: 1px solid #374151; padding: 6px 12px; border-radius: 6px; font-size: 12px; width: 120px; text-align: right;">
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Leverage</span>
+                        <input type="range" min="1" max="100" value="1" style="flex: 1;">
+                        <span class="text-white text-sm">1x</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Risk %</span>
+                        <input type="number" value="1" min="0.1" max="2" step="0.1" style="background: #0f1620; color: #fff; border: 1px solid #374151; padding: 6px 12px; border-radius: 6px; font-size: 12px; width: 80px; text-align: right;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRADE JOURNAL SECTION (FULL WIDTH AT BOTTOM) -->
+        <section class="journal-section">
+            <div class="journal-header">
+                <div class="journal-title">
+                    <svg style="width: 20px; height: 20px; color: #60a5fa;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                    Trade Journal & AI Mentor
+                </div>
+                <button class="btn">+ Add New Trade</button>
+            </div>
+            <div class="journal-content">
+                <div class="journal-entry">
+                    <div class="journal-entry-title">EUR/USD Long @ 1.0875</div>
+                    <div class="journal-entry-text">Breakout strategy. Target 1.0950. Stop 1.0820. Risk: 1%</div>
+                </div>
+                <div class="journal-entry">
+                    <div class="journal-entry-title">GBP/USD Short @ 1.2650</div>
+                    <div class="journal-entry-text">Reversal from resistance. Target 1.2550. Stop 1.2720. Risk: 1.5%</div>
+                </div>
+                <div class="journal-entry">
+                    <div class="journal-entry-title">AI Insight: Win Rate Analysis</div>
+                    <div class="journal-entry-text">Last 100 trades: 76% win rate. Most profitable strategy: Trend Following during London session.</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Simple tab switching functionality
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from siblings
+                this.parentElement.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                // Add active class to clicked button
+                this.classList.add('active');
+            });
+        });
+
+        // Chart timeframe switching
+        document.querySelectorAll('.chart-controls button').forEach(button => {
+            button.addEventListener('click', function() {
+                this.parentElement.querySelectorAll('button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+
+        // Leverage slider value display
+        const leverageInput = document.querySelector('input[type="range"]');
+        const leverageDisplay = leverageInput.nextElementSibling;
+        leverageInput.addEventListener('input', function() {
+            leverageDisplay.textContent = this.value + 'x';
+        });
+    </script>
+</body>
+</html>
+

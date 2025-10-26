@@ -1,0 +1,295 @@
+/**
+ * ✨ IMPROVED ANIMATION SYSTEM
+ * Performanslı micro-interactions + loading states
+ */
+
+:root {
+  /* ─────────────────────────────────────────────────────────────────────── */
+  /* TIMING FUNCTIONS */
+  /* ─────────────────────────────────────────────────────────────────────── */
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  
+  /* ─────────────────────────────────────────────────────────────────────── */
+  /* DURATIONS */
+  /* ─────────────────────────────────────────────────────────────────────── */
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-slow: 300ms;
+  --duration-slower: 500ms;
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* TRANSITION UTILITIES (Specific properties only — performans) */
+/* ─────────────────────────────────────────────────────────────────────── */
+.transition-colors {
+  transition-property: background-color, border-color, color;
+  transition-timing-function: var(--ease-in-out);
+  transition-duration: var(--duration-base);
+}
+
+.transition-transform {
+  transition-property: transform;
+  transition-timing-function: var(--ease-in-out);
+  transition-duration: var(--duration-base);
+}
+
+.transition-opacity {
+  transition-property: opacity;
+  transition-timing-function: var(--ease-in-out);
+  transition-duration: var(--duration-base);
+}
+
+.transition-shadow {
+  transition-property: box-shadow;
+  transition-timing-function: var(--ease-in-out);
+  transition-duration: var(--duration-base);
+}
+
+/* Combined transitions */
+.transition-all-fast {
+  transition-property: background-color, border-color, color, transform, box-shadow;
+  transition-timing-function: var(--ease-in-out);
+  transition-duration: var(--duration-fast);
+}
+
+.transition-all-base {
+  transition-property: background-color, border-color, color, transform, box-shadow;
+  transition-timing-function: var(--ease-in-out);
+  transition-duration: var(--duration-base);
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* HOVER EFFECTS (Micro-interactions) */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+/* Scale up (subtle) */
+.hover-scale:hover {
+  transform: scale(1.02);
+}
+
+.hover-scale-lg:hover {
+  transform: scale(1.05);
+}
+
+/* Lift effect (shadow + translate) */
+.hover-lift {
+  transition: transform var(--duration-base) var(--ease-out),
+              box-shadow var(--duration-base) var(--ease-out);
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Glow effect */
+.hover-glow-buy {
+  transition: box-shadow var(--duration-base) var(--ease-out);
+}
+
+.hover-glow-buy:hover {
+  box-shadow: var(--shadow-glow-buy);
+}
+
+.hover-glow-sell {
+  transition: box-shadow var(--duration-base) var(--ease-out);
+}
+
+.hover-glow-sell:hover {
+  box-shadow: var(--shadow-glow-sell);
+}
+
+.hover-glow-info {
+  transition: box-shadow var(--duration-base) var(--ease-out);
+}
+
+.hover-glow-info:hover {
+  box-shadow: var(--shadow-glow-info);
+}
+
+/* Brightness increase */
+.hover-brightness:hover {
+  filter: brightness(1.1);
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* LOADING ANIMATIONS */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+/* Spinner */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Pulse (skeleton loading) */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Bounce */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(-25%);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+.animate-bounce {
+  animation: bounce 1s infinite;
+}
+
+/* Progress bar */
+@keyframes progress {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(400%); }
+}
+
+.animate-progress {
+  animation: progress 1.5s ease-in-out infinite;
+}
+
+/* Fade in */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn var(--duration-base) var(--ease-out);
+}
+
+/* Slide in from bottom */
+@keyframes slideInBottom {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-in-bottom {
+  animation: slideInBottom var(--duration-base) var(--ease-out);
+}
+
+/* Slide in from right */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-right {
+  animation: slideInRight var(--duration-base) var(--ease-out);
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* SKELETON LOADING */
+/* ─────────────────────────────────────────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-panel) 0%,
+    var(--bg-elevated) 50%,
+    var(--bg-panel) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-text {
+  height: 1rem;
+  border-radius: var(--radius-sm);
+}
+
+.skeleton-heading {
+  height: 1.5rem;
+  border-radius: var(--radius-sm);
+}
+
+.skeleton-card {
+  height: 8rem;
+  border-radius: var(--radius-lg);
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* FOCUS ANIMATIONS */
+/* ─────────────────────────────────────────────────────────────────────── */
+.focus-ring-animated:focus {
+  outline: none;
+  animation: focus-ring-pulse 1s ease-in-out infinite;
+}
+
+@keyframes focus-ring-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 3px var(--border-focus);
+  }
+  50% {
+    box-shadow: 0 0 0 5px var(--border-focus);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* STAGGER ANIMATIONS (List items) */
+/* ─────────────────────────────────────────────────────────────────────── */
+.stagger-item {
+  animation: slideInBottom var(--duration-base) var(--ease-out);
+}
+
+.stagger-item:nth-child(1) { animation-delay: 0ms; }
+.stagger-item:nth-child(2) { animation-delay: 50ms; }
+.stagger-item:nth-child(3) { animation-delay: 100ms; }
+.stagger-item:nth-child(4) { animation-delay: 150ms; }
+.stagger-item:nth-child(5) { animation-delay: 200ms; }
+.stagger-item:nth-child(6) { animation-delay: 250ms; }
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* PERFORMANCE OPTIMIZATION */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+/* GPU acceleration for transforms */
+.gpu-accelerated {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+

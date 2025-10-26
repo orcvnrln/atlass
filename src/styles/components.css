@@ -1,0 +1,82 @@
+/* Component Utility Classes */
+
+@layer components {
+  /* Button System - Consistent sizes and styles */
+  .btn {
+    @apply rounded-lg font-medium transition-colors duration-150;
+    @apply focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2;
+  }
+  
+  .btn-sm {
+    @apply px-3 py-1.5 text-sm;
+  }
+  
+  .btn-md {
+    @apply px-4 py-2 text-base;
+  }
+  
+  .btn-lg {
+    @apply px-6 py-3 text-lg;
+  }
+  
+  .btn-icon {
+    @apply p-2;
+  }
+  
+  .btn-primary {
+    @apply bg-accent text-white;
+    @apply hover:opacity-90;
+  }
+  
+  .btn-secondary {
+    @apply bg-card-bg text-text-primary border border-border-color;
+    @apply hover:bg-gray-800;
+  }
+  
+  .btn-ghost {
+    @apply bg-transparent text-text-secondary;
+    @apply hover:bg-white/10 hover:text-text-primary;
+  }
+
+  /* Spacing Utilities - Consistent padding/margin */
+  .section-padding {
+    @apply p-6;
+  }
+  
+  .card-padding {
+    @apply p-4;
+  }
+  
+  .table-padding {
+    @apply px-6 py-4;
+  }
+
+  /* Focus Ring - Consistent focus states */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-primary-bg;
+  }
+
+  /* Screen Reader Only */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  .focus\:not-sr-only:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: inherit;
+    margin: inherit;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
+}
