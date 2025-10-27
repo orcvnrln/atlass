@@ -141,16 +141,16 @@ const EnhancedDashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-primary-bg p-6 space-y-6">
+    <div className="min-h-screen bg-primary-bg p-4 md:p-6 lg:p-8 space-y-6">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center justify-between"
+        className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-2"
       >
         <div>
-          <h1 className="text-3xl font-bold text-text-primary">Dashboard</h1>
-          <p className="text-sm text-text-secondary mt-1">
+          <h1 className="text-2xl md:text-3xl font-bold text-text-primary">Dashboard</h1>
+          <p className="text-sm text-gray-400 mt-1.5">
             Real-time overview of your trading performance
           </p>
         </div>
@@ -165,7 +165,7 @@ const EnhancedDashboard = () => {
       </motion.div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-5 lg:gap-6">
         {kpiData.map((kpi, index) => (
           <motion.div
             key={kpi.title}
@@ -182,7 +182,7 @@ const EnhancedDashboard = () => {
       <QuickActions onNewMiniChart={() => toast.success('Opening new mini-chart...')} />
 
       {/* Main Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-8">
         {/* Left Column - Charts */}
         <div className="lg:col-span-2 space-y-6">
           <PerformanceChart />

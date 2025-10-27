@@ -74,6 +74,25 @@
   --border-color: #475569;          /* NEW: Unified border variable */
 }
 
+.bg-input-bg {
+  background-color: rgba(31, 41, 55, 0.85);
+  color: var(--text-primary);
+}
+
+.bg-input-bg:focus {
+  background-color: rgba(55, 65, 81, 0.9);
+}
+
+.bg-input-bg::placeholder,
+.placeholder-text-secondary::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+.border-border {
+  border-color: var(--border-color) !important;
+}
+
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   background-color: var(--primary-bg);

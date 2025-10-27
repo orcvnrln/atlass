@@ -20,6 +20,9 @@ import ProfessionalChart from './ProfessionalChart';
 import MarketDepth from './MarketDepth';
 import OrderPanel from './OrderPanel';
 import { useTradingStore } from '@/core/state/store';
+import { AdvancedAITradingChart } from '@/components/Chart/AdvancedAITradingChart';
+import { AIAnalysisPanel } from '@/components/ai/AIAnalysisPanel';
+import { analyzeMarket } from '@/services/aiTradingAnalyzer';
 
 const LAYOUT_MODES = [
   { id: 'standard', label: 'Standard', icon: Grid3X3 },
@@ -35,12 +38,15 @@ const InstitutionalWorkspace = ({
   const [showSidePanels, setShowSidePanels] = useState(true);
   const [activeSymbol, setActiveSymbol] = useState(initialSymbol);
   const [timeframe, setTimeframe] = useState('15m');
+  const [showAIPanel, setShowAIPanel] = useState(true);
+  const [aiAnalysis, setAiAnalysis] = useState(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   // Get data from Zustand store
   const currentPrice = useTradingStore((state) => state.currentPrice);
   const candles = useTradingStore((state) => state.candles);
   const setSymbol = useTradingStore((state) => state.setSymbol);
-  const setTimeframe = useTradingStore((state) => state.setTimeframe);
+  const updateStoreTimeframe = useTradingStore((state) => state.setTimeframe);
 
   // Update store when symbol changes
   useEffect(() => {
@@ -49,11 +55,25 @@ const InstitutionalWorkspace = ({
 
   // Update store when timeframe changes
   useEffect(() => {
-    setTimeframe(timeframe);
-  }, [timeframe, setTimeframe]);
+    updateStoreTimeframe(timeframe);
+  }, [timeframe, updateStoreTimeframe]);
 
   const handleTimeframeChange = (newTimeframe) => {
     setTimeframe(newTimeframe);
+  };
+
+  // AI Analysis Function
+  const runAIAnalysis = () => {
+    if (candles.length < 50) {
+      alert('Need at least 50 candles for AI analysis');
+      return;
+    }
+    setIsAnalyzing(true);
+    setTimeout(() => {
+      const result = analyzeMarket(candles);
+      setAiAnalysis(result);
+      setIsAnalyzing(false);
+    }, 1500);
   };
 
   const renderLayout = () => {
@@ -130,23 +150,26 @@ const InstitutionalWorkspace = ({
               />
             </div>
             
-            {/* Center - Main Chart */}
-            <div className="col-span-6">
-              <ProfessionalChart
-                symbol={activeSymbol}
-                initialTimeframe={timeframe}
-                onTimeframeChange={handleTimeframeChange}
-                className="h-full"
-              />
+            {/* Center - AI Trading Chart */}
+            <div className="col-span-6 relative">
+              <AdvancedAITradingChart />
             </div>
             
-            {/* Right Panel - Market Depth */}
+            {/* Right Panel - AI Analysis */}
             <div className="col-span-3">
-              <MarketDepth
-                symbol={activeSymbol}
-                currentPrice={currentPrice}
-                className="h-full"
-              />
+              {showAIPanel ? (
+                <AIAnalysisPanel
+                  analysis={aiAnalysis}
+                  isAnalyzing={isAnalyzing}
+                  onRefresh={runAIAnalysis}
+                />
+              ) : (
+                <MarketDepth
+                  symbol={activeSymbol}
+                  currentPrice={currentPrice}
+                  className="h-full"
+                />
+              )}
             </div>
           </div>
         );
@@ -226,6 +249,19 @@ const InstitutionalWorkspace = ({
                 );
               })}
             </div>
+
+            {/* Toggle AI Panel */}
+            <button
+              onClick={() => setShowAIPanel(!showAIPanel)}
+              className="p-2 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors"
+              title={showAIPanel ? 'Show Market Depth' : 'Show AI Analysis'}
+            >
+              {showAIPanel ? (
+                <BarChart3 className="w-5 h-5 text-slate-400" />
+              ) : (
+                <Brain className="w-5 h-5 text-blue-400" />
+              )}
+            </button>
 
             {/* Toggle Side Panels */}
             <button

@@ -6,7 +6,7 @@
 
 import React, { useEffect } from 'react';
 import { PlotlyChart } from '../Chart/PlotlyChart';
-import { AISuggestions } from '../AI/AISuggestions';
+import { AISuggestions } from '../ai/AISuggestions';
 import { OrderPanel } from '../Order/OrderPanel';
 import { useTradingStore } from '../../core/state/store';
 import { initializeEventBus } from '../../core/events/eventBus';
@@ -44,7 +44,7 @@ export const TradingLayout: React.FC = () => {
 
   // ─── RENDER ───
   return (
-    <div className="h-screen w-screen bg-gray-950 text-gray-200 overflow-hidden">
+    <div className="h-screen w-screen bg-gray-950 text-gray-200">
       {/* Top Bar */}
       <div className="h-14 bg-gray-900 border-b border-gray-800 flex items-center justify-between px-4">
         {/* Logo */}

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import { TrendingUp, TrendingDown } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const mockAllocationData = [
   { name: 'Stocks', value: 45000, percentage: 35.4, change: 5.2, color: '#4C6EF5' },
@@ -13,6 +14,7 @@ const mockAllocationData = [
 
 const AssetAllocationPie = () => {
   const [activeIndex, setActiveIndex] = useState(null);
+  const navigate = useNavigate();
 
   const totalValue = mockAllocationData.reduce((sum, item) => sum + item.value, 0);
 
@@ -75,7 +77,8 @@ const AssetAllocationPie = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1 }}
-      className="bg-card-bg rounded-xl border border-border-color p-6"
+      onClick={() => navigate('/asset-allocation-detail')}
+      className="bg-card-bg rounded-xl border border-border-color p-6 cursor-pointer hover:border-accent transition-colors"
     >
       {/* Header */}
       <div className="mb-6">

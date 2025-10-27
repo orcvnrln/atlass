@@ -90,13 +90,13 @@ const RealTimeKPI = ({ title, value, change, changePercent, icon: Icon, isPositi
         {isRealTime && (
           <div className="flex items-center gap-1">
             <div className="w-2 h-2 rounded-full bg-positive animate-pulse"></div>
-            <span className="text-xs text-text-secondary">Live</span>
+            <span className="text-xs text-gray-400 font-medium">Live</span>
           </div>
         )}
       </div>
       
       <div className="space-y-1">
-        <h3 className="text-xs font-medium text-text-secondary uppercase tracking-wide">{title}</h3>
+        <h3 className="text-xs font-medium text-gray-400 uppercase tracking-wide">{title}</h3>
         <div className="flex items-baseline gap-2">
           <p className="text-2xl font-bold text-text-primary">
             {isRealTime ? (
@@ -116,7 +116,7 @@ const RealTimeKPI = ({ title, value, change, changePercent, icon: Icon, isPositi
             </motion.div>
           )}
         </div>
-        <p className="text-xs text-text-secondary">{change}</p>
+        <p className="text-xs text-gray-400">{change}</p>
       </div>
     </motion.div>
   );

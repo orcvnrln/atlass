@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Comprehensive Audit Tool</title>
+    <style>
+        :root {
+            --bg-dark: #1a1a1a;
+            --text-dark: #e0e0e0;
+            --primary-dark: #2a2a2a;
+            --secondary-dark: #3a3a3a;
+            --accent-dark: #007bff;
+            --success-dark: #28a745;
+            --warning-dark: #ffc107;
+            --danger-dark: #dc3545;
+
+            --bg-light: #f4f4f9;
+            --text-light: #333;
+            --primary-light: #ffffff;
+            --secondary-light: #e9ecef;
+            --accent-light: #007bff;
+            --success-light: #28a745;
+            --warning-light: #ffc107;
+            --danger-light: #dc3545;
+
+            --bg-color: var(--bg-light);
+            --text-color: var(--text-light);
+            --primary-color: var(--primary-light);
+            --secondary-color: var(--secondary-light);
+            --accent-color: var(--accent-light);
+            --success-color: var(--success-light);
+            --warning-color: var(--warning-light);
+            --danger-color: var(--danger-light);
+        }
+
+        html.dark {
+            --bg-color: var(--bg-dark);
+            --text-color: var(--text-dark);
+            --primary-color: var(--primary-dark);
+            --secondary-color: var(--secondary-dark);
+            --accent-color: var(--accent-dark);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: var(--primary-color);
+            border-bottom: 1px solid var(--secondary-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8em;
+            color: var(--accent-color);
+        }
+
+        .theme-switcher {
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            background-color: var(--secondary-color);
+        }
+
+        main {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background-color: var(--primary-color);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .input-group input[type="url"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--secondary-color);
+            border-radius: 4px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            box-sizing: border-box;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: var(--accent-color);
+            color: white;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .results-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .result-card {
+            border: 1px solid var(--secondary-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .result-header {
+            padding: 15px;
+            background-color: var(--secondary-color);
+            font-weight: bold;
+        }
+
+        .result-body {
+            padding: 15px;
+        }
+
+        .issue {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: var(--primary-color);
+        }
+
+        .issue.critical { border-left: 4px solid var(--danger-color); }
+        .issue.high { border-left: 4px solid #ff6b6b; }
+        .issue.medium { border-left: 4px solid var(--warning-color); }
+        .issue.low { border-left: 4px solid #00d4aa; }
+
+        .issue h4 {
+            margin: 0 0 5px 0;
+            font-size: 1.1em;
+        }
+
+        .issue p {
+            margin: 0;
+        }
+
+        .loader {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loader.active {
+            display: block;
+        }
+
+        .loader-spinner {
+            border: 4px solid var(--secondary-color);
+            border-top: 4px solid var(--accent-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (min-width: 768px) {
+            main {
+                grid-template-columns: 300px 1fr;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Website Audit Tool</h1>
+        <div class="theme-switcher" id="themeSwitcher" title="Theme Change">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </div>
+    </header>
+
+    <div class="container">
+        <main>
+            <aside class="card">
+                <h2>Audit Parameters</h2>
+                <div class="input-group">
+                    <label for="urlInput">Enter URL</label>
+                    <input type="url" id="urlInput" placeholder="https://example.com">
+                </div>
+                <button class="btn" id="startAuditBtn">Start Audit</button>
+            </aside>
+
+            <div class="results-section" id="resultsSection">
+                <div class="loader" id="loader">
+                    <div class="loader-spinner"></div>
+                    <p>Auditing...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // DOM Elements
+        const themeSwitcher = document.getElementById('themeSwitcher');
+        const startAuditBtn = document.getElementById('startAuditBtn');
+        const urlInput = document.getElementById('urlInput');
+        const loader = document.getElementById('loader');
+        const resultsSection = document.getElementById('resultsSection');
+
+        // Theme Switcher
+        themeSwitcher.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
+
+        // Start Audit
+        startAuditBtn.addEventListener('click', async () => {
+            const url = urlInput.value.trim();
+            if (!url) {
+                alert('Please enter a URL.');
+                return;
+            }
+
+            loader.classList.add('active');
+            resultsSection.innerHTML = '<div class="loader active" id="loader"><div class="loader-spinner"></div><p>Auditing...</p></div>';
+
+            try {
+                // Use a proxy to avoid CORS
+                const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+                const response = await fetch(proxyUrl);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const html = await response.text();
+
+                const auditResults = performAudit(html, url);
+                displayResults(auditResults);
+            } catch (error) {
+                console.error('Audit error:', error);
+                resultsSection.innerHTML = `<p style="color: var(--danger-color)">Failed to audit: ${error.message}</p>`;
+            } finally {
+                loader.classList.remove('active');
+            }
+        });
+
+        function performAudit(html, url) {
+            const doc = new DOMParser().parseFromString(html, 'text/html');
+            const results = {};
+
+            // Performance Analysis
+            results.performance = analyzePerformance(doc, html);
+
+            // SEO Analysis
+            results.seo = analyzeSEO(doc);
+
+            // UX/UI Analysis
+            results.ux = analyzeUX(doc);
+
+            // Security Analysis
+            results.security = analyzeSecurity(doc, url);
+
+            return results;
+        }
+
+        function analyzePerformance(doc, html) {
+            const issues = [];
+
+            // FCP, LCP, etc. are hard to measure without actual loading, so we'll estimate based on HTML
+
+            // Image Optimization
+            const images = doc.querySelectorAll('img');
+            images.forEach(img => {
+                if (!img.src.includes('.webp') && !img.src.includes('.avif')) {
+                    issues.push({
+                        description: `Image at ${img.src.substring(0, 50)}... is not in optimized format (WebP/AVIF)`,
+                        criticality: 'Medium',
+                        fix: 'Convert images to WebP or AVIF format',
+                        benefit: 'Faster loading and smaller file sizes'
+                    });
+                }
+            });
+
+            // JS Bundle Size (estimate)
+            const scripts = doc.querySelectorAll('script');
+            let totalJSSize = 0;
+            scripts.forEach(script => {
+                if (script.src) totalJSSize += 100; // Placeholder
+            });
+            if (totalJSSize > 500) {
+                issues.push({
+                    description: 'Large JavaScript bundle size',
+                    criticality: 'High',
+                    fix: 'Split JS bundles and lazy load non-critical scripts',
+                    benefit: 'Improved TTI and overall performance'
+                });
+            }
+
+            // CSS Optimization
+            const styles = doc.querySelectorAll('style, link[rel="stylesheet"]');
+            if (styles.length > 10) {
+                issues.push({
+                    description: 'Multiple CSS files, potential unused CSS',
+                    criticality: 'Medium',
+                    fix: 'Combine CSS and remove unused styles',
+                    benefit: 'Faster rendering and smaller payload'
+                });
+            }
+
+            // Caching and Compression (check headers, but since we don't have them, assume based on presence)
+            if (!html.includes('gzip') && !html.includes('brotli')) {
+                issues.push({
+                    description: 'No compression detected',
+                    criticality: 'High',
+                    fix: 'Enable Gzip or Brotli compression on server',
+                    benefit: 'Reduced bandwidth and faster loading'
+                });
+            }
+
+            // Mobile Performance
+            if (!doc.querySelector('meta[name="viewport"]')) {
+                issues.push({
+                    description: 'No viewport meta tag',
+                    criticality: 'High',
+                    fix: 'Add <meta name="viewport" content="width=device-width, initial-scale=1.0">',
+                    benefit: 'Better mobile experience'
+                });
+            }
+
+            return issues;
+        }
+
+        function analyzeSEO(doc) {
+            const issues = [];
+
+            // Title and Description
+            const title = doc.querySelector('title');
+            if (!title || title.textContent.length < 30) {
+                issues.push({
+                    description: 'Title is missing or too short',
+                    criticality: 'High',
+                    fix: 'Add descriptive title (30-60 characters)',
+                    benefit: 'Better search rankings'
+                });
+            }
+
+            const metaDesc = doc.querySelector('meta[name="description"]');
+            if (!metaDesc || metaDesc.content.length < 120) {
+                issues.push({
+                    description: 'Meta description missing or too short',
+                    criticality: 'Medium',
+                    fix: 'Add meta description (120-160 characters)',
+                    benefit: 'Improved CTR in search results'
+                });
+            }
+
+            // H1 Tags
+            const h1 = doc.querySelectorAll('h1');
+            if (h1.length === 0) {
+                issues.push({
+                    description: 'No H1 tag',
+                    criticality: 'Medium',
+                    fix: 'Add H1 tag with main keyword',
+                    benefit: 'Better content structure'
+                });
+            } else if (h1.length > 1) {
+                issues.push({
+                    description: 'Multiple H1 tags',
+                    criticality: 'Low',
+                    fix: 'Use only one H1 tag',
+                    benefit: 'Clearer page hierarchy'
+                });
+            }
+
+            // Alt Text
+            const imagesWithoutAlt = doc.querySelectorAll('img:not([alt])');
+            if (imagesWithoutAlt.length > 0) {
+                issues.push({
+                    description: `${imagesWithoutAlt.length} images without alt text`,
+                    criticality: 'Medium',
+                    fix: 'Add descriptive alt text to all images',
+                    benefit: 'Accessibility and SEO improvement'
+                });
+            }
+
+            return issues;
+        }
+
+        function analyzeUX(doc) {
+            const issues = [];
+
+            // Broken Links
+            const links = doc.querySelectorAll('a[href]');
+            links.forEach(link => {
+                if (link.href === '#') {
+                    issues.push({
+                        description: `Link points to #`,
+                        criticality: 'Low',
+                        fix: 'Provide proper href or remove link',
+                        benefit: 'Better user experience'
+                    });
+                }
+            });
+
+            // Touch Targets (estimate)
+            const buttons = doc.querySelectorAll('button, a');
+            buttons.forEach(btn => {
+                const computedStyle = getComputedStyle(btn);
+                const minSize = 44; // px
+                // This is hard without actual rendering, so skip detailed check
+            });
+
+            // Form Accessibility
+            const inputs = doc.querySelectorAll('input');
+            let hasLabel = 0;
+            inputs.forEach(input => {
+                if (input.getAttribute('aria-label') || input.closest('label')) hasLabel++;
+            });
+            if (hasLabel < inputs.length) {
+                issues.push({
+                    description: 'Some inputs lack labels',
+                    criticality: 'Medium',
+                    fix: 'Add labels or aria-label to inputs',
+                    benefit: 'Better accessibility'
+                });
+            }
+
+            return issues;
+        }
+
+        function analyzeSecurity(doc, url) {
+            const issues = [];
+
+            // HTTPS
+            if (!url.startsWith('https://')) {
+                issues.push({
+                    description: 'Site not using HTTPS',
+                    criticality: 'Critical',
+                    fix: 'Enable HTTPS with SSL certificate',
+                    benefit: 'Security and SEO boost'
+                });
+            }
+
+            // No CSP
+            if (!doc.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
+                issues.push({
+                    description: 'No Content Security Policy',
+                    criticality: 'Medium',
+                    fix: 'Add CSP meta tag',
+                    benefit: 'Protection against XSS'
+                });
+            }
+
+            return issues;
+        }
+
+        function displayResults(results) {
+            resultsSection.innerHTML = '';
+
+            for (const [category, issues] of Object.entries(results)) {
+                const card = document.createElement('div');
+                card.className = 'result-card';
+
+                card.innerHTML = `
+                    <div class="result-header">${category.toUpperCase()}</div>
+                    <div class="result-body">
+                        ${issues.length === 0 ? '<p>No issues found.</p>' : issues.map(issue => `
+                            <div class="issue ${issue.criticality.toLowerCase()}">
+                                <h4>${issue.criticality}: ${issue.description}</h4>
+                                <p><strong>Fix:</strong> ${issue.fix}</p>
+                                <p><strong>Benefit:</strong> ${issue.benefit}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                resultsSection.appendChild(card);
+            }
+        }
+
+    </script>
+</body>
+</html>

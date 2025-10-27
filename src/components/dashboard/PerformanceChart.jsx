@@ -6,7 +6,7 @@ import { mockPerformanceData } from '@/data/mockData';
 const PerformanceChart = () => {
   return (
     <Card title="Portfolio Performance" className="col-span-1 md:col-span-2 lg:col-span-4">
-      <div className="h-80">
+      <div className="h-64 md:h-72 lg:h-80 max-h-96">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={mockPerformanceData}>
             <defs>
