@@ -20,6 +20,7 @@ import InstitutionalBot from './pages/InstitutionalBot';
 import BacktestingPage from './pages/BacktestingPage';
 import PaperTradingPage from './pages/PaperTradingPage';
 import Settings from './pages/Settings';
+import HelpPage from './pages/HelpPage';
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
           <Route path="/backtesting" element={<BacktestingPage />} />
           <Route path="/paper-trading" element={<PaperTradingPage />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/help" element={<HelpPage />} />
 
           {/* AI Suite nested routes */}
           <Route path="/ai-suite">
