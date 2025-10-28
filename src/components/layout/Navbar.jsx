@@ -9,7 +9,6 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(null);
   const [assetSearch, setAssetSearch] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
 
@@ -47,7 +46,7 @@ const Navbar = () => {
     <>
       <header className="fixed top-0 left-0 lg:left-[257px] right-0 h-16 bg-primary-bg/80 backdrop-blur-sm border-b border-border-color flex items-center justify-between px-4 lg:px-6 z-50">
         <div className="flex items-center gap-4">
-          {/* Mobile Menu Toggle */}
+           {/* Mobile Menu Toggle */}
           <button 
             className="p-2 rounded-full hover:bg-accent/20 lg:hidden" 
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}

@@ -85,7 +85,7 @@ const mockInsights = [
   },
 ];
 
-const InsightCard = React.forwardRef(({ insight, onDismiss }, ref) => {
+const InsightCard = ({ insight, onDismiss }) => {
   const config = insightTypes[insight.type];
   const Icon = config.icon;
   
@@ -113,16 +113,15 @@ const InsightCard = React.forwardRef(({ insight, onDismiss }, ref) => {
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 20 }}
-      ref={ref}
       className={`relative p-4 rounded-xl border ${config.bg} ${config.border} transition-all hover:shadow-lg hover:border-opacity-40`}
     >
       {/* Header */}
-      <div className="flex items-start justify-between mb-3 gap-2">
+      <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-3">
           <div className={`p-2.5 rounded-lg ${config.bg} ring-1 ring-white/10`}>
             <Icon className={`w-5 h-5 ${config.color}`} />
           </div>
-          <div className="flex-1 min-w-0">
+          <div className="flex-1">
             <div className="flex items-center gap-2 mb-1">
               <h4 className={`font-bold text-sm ${config.color}`}>
                 {insight.title}
@@ -133,7 +132,7 @@ const InsightCard = React.forwardRef(({ insight, onDismiss }, ref) => {
                 </span>
               )}
             </div>
-            <div className="flex items-center gap-3 text-[11px] text-gray-400">
+            <div className="flex items-center gap-3 text-[11px] text-text-secondary">
               <span className="font-mono font-semibold">{insight.asset}</span>
               <span>•</span>
               <span>{insight.timeframe}</span>
@@ -154,24 +153,24 @@ const InsightCard = React.forwardRef(({ insight, onDismiss }, ref) => {
       </div>
 
       {/* Message */}
-      <p className="text-xs text-gray-300 leading-relaxed mb-3 pl-[52px] break-words overflow-hidden">
+      <p className="text-xs text-text-secondary leading-relaxed mb-3 pl-[52px]">
         {insight.message}
       </p>
 
       {/* Metadata & Actions */}
-      <div className="flex items-start md:items-center justify-between pl-[52px] gap-3 flex-wrap">
+      <div className="flex items-center justify-between pl-[52px]">
         <div className="flex items-center gap-4">
           {/* Confidence */}
           <div className="flex items-center gap-1.5">
             <Brain className="w-3.5 h-3.5 text-purple-400" />
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1">
               <div className="h-1.5 w-16 bg-gray-700 rounded-full overflow-hidden">
                 <div 
                   className={`h-full ${config.color.replace('text-', 'bg-')} transition-all`}
                   style={{ width: `${insight.confidence}%` }}
                 />
               </div>
-              <span className="text-[11px] font-semibold text-gray-400">
+              <span className="text-[11px] font-semibold text-text-secondary">
                 {insight.confidence}%
               </span>
             </div>
@@ -205,7 +204,7 @@ const InsightCard = React.forwardRef(({ insight, onDismiss }, ref) => {
       </div>
     </motion.div>
   );
-});
+};
 
 const AIInsightsPanel = () => {
   const [insights, setInsights] = useState(mockInsights);
@@ -326,7 +325,7 @@ const AIInsightsPanel = () => {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="p-4 space-y-3 max-h-[500px] lg:max-h-[600px] overflow-y-auto scrollbar-thin"
+            className="p-4 space-y-3 max-h-[600px] overflow-y-auto scrollbar-thin"
           >
             <AnimatePresence mode="popLayout">
               {filteredInsights.length === 0 ? (
@@ -337,7 +336,7 @@ const AIInsightsPanel = () => {
                   className="text-center py-12 text-text-secondary"
                 >
                   <Brain className="w-16 h-16 mx-auto mb-3 opacity-30" />
-                  <p className="text-sm font-semibold text-gray-300">
+                  <p className="text-sm font-semibold">
                     {insights.length === 0 ? 'No active insights' : `No ${filterType} insights`}
                   </p>
                   <p className="text-xs mt-1">

@@ -1,6 +1,24 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Wallet, Zap } from 'lucide-react';
+import {
+  Home,
+  Wallet,
+  LineChart,
+  Newspaper,
+  Calendar,
+  Settings,
+  BookOpen,
+  Bot,
+  BrainCircuit,
+  Network,
+  CircuitBoard,
+  Database,
+  HelpCircle,
+  BarChart2,
+  TrendingUp,
+  Target,
+  Zap
+} from 'lucide-react';
 import ThemeSwitcher from '@/components/ui/ThemeSwitcher';
 import { motion } from 'framer-motion';
 
@@ -8,17 +26,17 @@ const NavItem = ({ item }) => {
   return (
     <NavLink
       to={item.path}
-      end={item.end}
-      className={({ isActive }) =>
-        `flex items-center p-3 rounded-lg transition-all duration-200 text-sm font-medium ${
-          isActive
-            ? 'bg-accent text-white shadow-lg'
-            : 'text-text-on-card-secondary hover:bg-white/10 hover:text-text-on-card-primary'
-        }`
-      }
+      end={item.exact}
+      className={({ isActive }) => `
+        flex items-center p-3 rounded-lg transition-all duration-200 text-sm font-medium
+        ${isActive 
+          ? 'bg-accent text-white shadow-lg' 
+          : 'text-text-on-card-secondary hover:bg-white/10 hover:text-text-on-card-primary'
+        }
+      `}
     >
       <item.icon className="w-5 h-5 mr-3" />
-      {item.name}
+      <span>{item.label}</span>
     </NavLink>
   );
 };
@@ -38,15 +56,28 @@ const Sidebar = () => {
     setMousePosition({ x: -100, y: -100 });
   };
 
-  // Only include routes that actually exist in App.tsx
-  const mainNavItems = [
-    { path: '/dashboard', icon: Home, name: 'Dashboard', end: true },
-  ];
-
-  const aiSuiteNavItems = [
-    { path: '/portfolio-analysis', icon: Wallet, name: 'Portfolio Analysis' },
-    { path: '/institutional-bot', icon: Zap, name: 'Institutional Bot' },
-    { path: '/ai-trading', icon: Zap, name: 'AI Trading' },
+  const navItems = [
+    { path: '/dashboard', icon: Home, label: 'Dashboard', exact: true },
+    { path: '/portfolio', icon: Wallet, label: 'Portfolio', exact: true },
+    { path: '/watchlist', icon: LineChart, label: 'Watchlist', exact: true },
+    { path: '/markets', icon: BarChart2, label: 'Markets', exact: true },
+    { path: '/news', icon: Newspaper, label: 'News Hub', exact: true },
+    { path: '/calendar', icon: Calendar, label: 'Economic Calendar', exact: true },
+    { path: '/trade-journal', icon: BookOpen, label: 'Trade Journal', exact: true },
+    { path: '/market-scanner', icon: Target, label: 'Market Scanner', exact: true },
+    { path: '/dark-pool', icon: Database, label: 'Dark Pool', exact: true },
+    { path: '/derivatives', icon: Network, label: 'Derivatives', exact: true },
+    { path: '/heatmap', icon: CircuitBoard, label: 'Market Heatmap', exact: true },
+    { path: '/ai-suite', icon: BrainCircuit, label: 'AI Suite', exact: true },
+    { path: '/ai-copilot', icon: Bot, label: 'AI Copilot', exact: true },
+    { path: '/ai-trading-bot', icon: Bot, label: 'AI Trading Bot', exact: true },
+    { path: '/portfolio-analysis', icon: TrendingUp, label: 'Portfolio Analysis', exact: true },
+    { path: '/correlation-matrix', icon: Network, label: 'Correlation Matrix', exact: true },
+    { path: '/institutional-bot', icon: Zap, label: 'Institutional Bot', exact: true },
+    { path: '/backtesting', icon: LineChart, label: 'Backtesting', exact: true },
+    { path: '/paper-trading', icon: TrendingUp, label: 'Paper Trading', exact: true },
+    { path: '/settings', icon: Settings, label: 'Settings', exact: true },
+    { path: '/help', icon: HelpCircle, label: 'Help & Support', exact: true },
   ];
 
   return (
@@ -78,16 +109,32 @@ const Sidebar = () => {
         <div className="relative z-10">
           <h2 className="px-3 mb-3 text-xs font-semibold tracking-wider text-text-on-card-secondary uppercase">Main</h2>
           <div className="space-y-1">
-            {mainNavItems.map((item) => <NavItem key={item.path} item={item} />)}
+            {navItems.slice(0, 6).map((item) => <NavItem key={item.path} item={item} />)}
           </div>
         </div>
 
-        {/* AI Suite Navigation */}
+        {/* Trading Tools */}
         <div className="relative z-10">
-            <h2 className="px-3 mb-3 text-xs font-semibold tracking-wider text-text-on-card-secondary uppercase">AI Suite</h2>
-            <div className="space-y-1">
-                {aiSuiteNavItems.map((item) => <NavItem key={item.path} item={item} />)}
-            </div>
+          <h2 className="px-3 mb-3 text-xs font-semibold tracking-wider text-text-on-card-secondary uppercase">Trading Tools</h2>
+          <div className="space-y-1">
+            {navItems.slice(6, 11).map((item) => <NavItem key={item.path} item={item} />)}
+          </div>
+        </div>
+
+        {/* AI Suite */}
+        <div className="relative z-10">
+          <h2 className="px-3 mb-3 text-xs font-semibold tracking-wider text-text-on-card-secondary uppercase">AI Suite</h2>
+          <div className="space-y-1">
+            {navItems.slice(11, 17).map((item) => <NavItem key={item.path} item={item} />)}
+          </div>
+        </div>
+
+        {/* Tools & Settings */}
+        <div className="relative z-10">
+          <h2 className="px-3 mb-3 text-xs font-semibold tracking-wider text-text-on-card-secondary uppercase">Tools & Settings</h2>
+          <div className="space-y-1">
+            {navItems.slice(17).map((item) => <NavItem key={item.path} item={item} />)}
+          </div>
         </div>
       </nav>
     </div>

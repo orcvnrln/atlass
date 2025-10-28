@@ -33,11 +33,7 @@
     }
   },
   "include": ["src", "src/**/*"],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "src/components/ai/JarvisAICopilot.tsx"
-  ],
+  "exclude": ["node_modules", "dist"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
 

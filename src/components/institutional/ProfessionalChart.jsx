@@ -59,7 +59,7 @@ const ProfessionalChart = ({
   const candles = useTradingStore((state) => state.candles);
   const currentPrice = useTradingStore((state) => state.currentPrice);
   const setSymbol = useTradingStore((state) => state.setSymbol);
-  const setStoreTimeframe = useTradingStore((state) => state.setTimeframe);
+  const setTimeframe = useTradingStore((state) => state.setTimeframe);
 
   // Calculate market statistics
   const marketStats = useMemo(() => {
@@ -380,12 +380,11 @@ const ProfessionalChart = ({
   const handleTimeframeChange = useCallback((newTimeframe) => {
     setIsLoading(true);
     setTimeframe(newTimeframe);
-    setStoreTimeframe(newTimeframe);
     if (onTimeframeChange) {
       onTimeframeChange(newTimeframe);
     }
     setTimeout(() => setIsLoading(false), 500);
-  }, [onTimeframeChange, setStoreTimeframe]);
+  }, [onTimeframeChange]);
 
   const toggleIndicator = useCallback((indicator) => {
     setActiveIndicators(prev => ({

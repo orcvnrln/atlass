@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from '@/context/ThemeContext';
 import EconomicCalendar from './EconomicCalendar';
 import { Link } from 'react-router-dom';
 import { getAssetData } from '@/data/marketData';
@@ -9,21 +9,21 @@ const heatmapSymbols = ['EURUSD', 'GBPUSD', 'USDJPY', 'EURJPY', 'BTCUSD', 'SPX50
 const heatmapData = heatmapSymbols.map(getAssetData).filter(Boolean);
 
 
-const getIntensityColor = (change, isDark) => {
+const getIntensityColor = (change, theme) => {
     const intensity = Math.min(Math.abs(change) / 3, 1) * 0.8 + 0.2; // from 20% to 100%
-    if (isDark) {
+    if (theme === 'theme-dark-pro') {
         return change > 0 
-            ? `rgba(255, 255, 255, ${intensity * 0.1})` // White with opacity subtle in dark
-            : `rgba(156, 163, 175, ${intensity * 0.1})`; // Gray with opacity subtle in dark
+            ? `rgba(255, 255, 255, ${intensity * 0.1})` // White with opacity
+            : `rgba(156, 163, 175, ${intensity * 0.1})`; // Gray with opacity
     }
-    // Light theme colors
+    // Fallback for other themes
     return change > 0 
         ? `rgba(22, 199, 132, ${intensity})` // Green with opacity
         : `rgba(234, 57, 67, ${intensity})`; // Red with opacity
 };
 
 const MarketOverview = () => {
-  const { isDark } = useTheme();
+  const { theme } = useTheme();
 
   return (
     <div className="bg-card-bg rounded-xl card-padding card-elevation border border-border-on-card">
@@ -35,7 +35,7 @@ const MarketOverview = () => {
               className={`rounded-lg card-padding flex flex-col justify-between border border-border-on-card ${item.change >= 0 ? 'card-hover-glow' : 'card-hover-glow-negative'} card-click-glow h-full`}
               style={{ 
                   minHeight: '100px',
-                  backgroundColor: getIntensityColor(item.change, isDark)
+                  backgroundColor: getIntensityColor(item.change, theme) 
               }}
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
