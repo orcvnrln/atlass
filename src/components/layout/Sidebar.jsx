@@ -25,7 +25,7 @@ import { motion } from 'framer-motion';
 const NavItem = ({ item }) => {
   return (
     <NavLink
-      to={item.path}
+      to={item.to}
       end={item.exact}
       className={({ isActive }) => `
         flex items-center p-3 rounded-lg transition-all duration-200 text-sm font-medium
@@ -57,27 +57,27 @@ const Sidebar = () => {
   };
 
   const navItems = [
-    { path: '/dashboard', icon: Home, label: 'Dashboard', exact: true },
-    { path: '/portfolio', icon: Wallet, label: 'Portfolio', exact: true },
-    { path: '/watchlist', icon: LineChart, label: 'Watchlist', exact: true },
-    { path: '/markets', icon: BarChart2, label: 'Markets', exact: true },
-    { path: '/news', icon: Newspaper, label: 'News Hub', exact: true },
-    { path: '/calendar', icon: Calendar, label: 'Economic Calendar', exact: true },
-    { path: '/trade-journal', icon: BookOpen, label: 'Trade Journal', exact: true },
-    { path: '/market-scanner', icon: Target, label: 'Market Scanner', exact: true },
-    { path: '/dark-pool', icon: Database, label: 'Dark Pool', exact: true },
-    { path: '/derivatives', icon: Network, label: 'Derivatives', exact: true },
-    { path: '/heatmap', icon: CircuitBoard, label: 'Market Heatmap', exact: true },
-    { path: '/ai-suite', icon: BrainCircuit, label: 'AI Suite', exact: true },
-    { path: '/ai-copilot', icon: Bot, label: 'AI Copilot', exact: true },
-    { path: '/ai-trading-bot', icon: Bot, label: 'AI Trading Bot', exact: true },
-    { path: '/portfolio-analysis', icon: TrendingUp, label: 'Portfolio Analysis', exact: true },
-    { path: '/correlation-matrix', icon: Network, label: 'Correlation Matrix', exact: true },
-    { path: '/institutional-bot', icon: Zap, label: 'Institutional Bot', exact: true },
-    { path: '/backtesting', icon: LineChart, label: 'Backtesting', exact: true },
-    { path: '/paper-trading', icon: TrendingUp, label: 'Paper Trading', exact: true },
-    { path: '/settings', icon: Settings, label: 'Settings', exact: true },
-    { path: '/help', icon: HelpCircle, label: 'Help & Support', exact: true },
+    { to: '/dashboard', icon: Home, label: 'Dashboard', exact: true },
+    { to: '/portfolio', icon: Wallet, label: 'Portfolio', exact: true },
+    { to: '/watchlist', icon: LineChart, label: 'Watchlist', exact: true },
+    { to: '/markets', icon: BarChart2, label: 'Markets', exact: true },
+    { to: '/news', icon: Newspaper, label: 'News Hub', exact: true },
+    { to: '/calendar', icon: Calendar, label: 'Economic Calendar', exact: true },
+    { to: '/trade-journal', icon: BookOpen, label: 'Trade Journal', exact: true },
+    { to: '/market-scanner', icon: Target, label: 'Market Scanner', exact: true },
+    { to: '/dark-pool', icon: Database, label: 'Dark Pool', exact: true },
+    { to: '/derivatives', icon: Network, label: 'Derivatives', exact: true },
+    { to: '/heatmap', icon: CircuitBoard, label: 'Market Heatmap', exact: true },
+    { to: '/ai-suite', icon: BrainCircuit, label: 'AI Suite', exact: true },
+    { to: '/ai-copilot', icon: Bot, label: 'AI Copilot', exact: true },
+    { to: '/ai-trading-bot', icon: Bot, label: 'AI Trading Bot', exact: true },
+    { to: '/portfolio-analysis', icon: TrendingUp, label: 'Portfolio Analysis', exact: true },
+    { to: '/correlation-matrix', icon: Network, label: 'Correlation Matrix', exact: true },
+    { to: '/institutional-bot', icon: Zap, label: 'Institutional Bot', exact: true },
+    { to: '/backtesting', icon: LineChart, label: 'Backtesting', exact: true },
+    { to: '/paper-trading', icon: TrendingUp, label: 'Paper Trading', exact: true },
+    { to: '/settings', icon: Settings, label: 'Settings', exact: true },
+    { to: '/help', icon: HelpCircle, label: 'Help & Support', exact: true },
   ];
 
   return (
